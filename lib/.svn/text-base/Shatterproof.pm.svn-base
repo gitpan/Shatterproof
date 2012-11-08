@@ -82,9 +82,9 @@ our $collapse_regions;				#flag variable
 
 our $outlier_deviation;				#the number of standard deviations away from the mean a value has to be in order to be considered non-significant
 
-our $chromosome_localization_weight;			#the scoring formula weight given to the localization of mutations to a specific region on the chromosome
-our $genome_localization_weight; 		#the scoring formula weight given to the localization of mutations to a specific chromosome
 our $cnv_weight;				#the scoring formula weight given to the aberrant CNV hallmark 
+our $mutation_density_weight;			#the scoring formula weight given to the localization of mutations to a specific region on the chromosome
+our $genome_localization_weight; 		#the scoring formula weight given to the localization of mutations to a specific chromosome
 our $translocation_weight; 			#the scoring formula weight given to the localization of translocations
 our $insertion_breakpoint_weight; 		#the scoring formula weight given to the number of insertions found at translocation breakpoints
 our $loh_weight;				#the scoring formula weight given to the amount of heterozygosity that is retained in a mutated region
@@ -2399,14 +2399,14 @@ sub analyze_suspect_regions {
 
 	#construct and print header
 	$header_string = "file: Suspect Chromothriptic Regions\n";
-	$header_string .= "bin_size:\t\t\t$bin_size\n";
+	$header_string .= "bin_size:\t\t$bin_size\n";
 	$header_string .= "localization_window_size:\t$localization_window_size\n";
 	$header_string .= "\n";
-	$header_string .= "genome_localization_score_weight:\t$genome_localization_weight\n";
-	$header_string .= "chromosome_localization_score_weight:\t$chromosome_localization_weight\n";
 	$header_string .= "cnv_score_weight:\t\t\t$cnv_weight\n";
+	$header_string .= "mutation_density_score_weight:\t\t$mutation_density_weight\n";
+	$header_string .= "genome_localization_score_weight:\t$genome_localization_weight\n";
 	$header_string .= "translocation_score_weight:\t\t$translocation_weight\n";
-	$header_string .= "insertion_breakpoint_score_weight:\t$insertion_breakpoint_weight\n";
+	$header_string .= "insertion_breakpoint_score_weight:\t\t$insertion_breakpoint_weight\n";
 	$header_string .= "loh_score_weight:\t\t\t$loh_weight\n";
 	$header_string .= "tp53_mutation_score_weight:\t\t$tp53_mutated_weight\n";
 	$header_string .= "\n";
@@ -2496,12 +2496,12 @@ sub analyze_suspect_regions {
 		$print_string .= "\n";
 
 		$print_string .= "final_score:\t\t\t$score\n";
-		$print_string .= "genome_localization_score:\t".$score_array[2]*$genome_localization_weight."\t(".$score_array[2].")"."\n";
-		$print_string .= "mutation_density_score:\t\t".$score_array[1]*$chromosome_localization_weight."\t(".$score_array[1].")"."\n";
-		$print_string .= "cnv_score:\t\t\t".$score_array[0]*$cnv_weight."\t(".$score_array[0].")"."\n";
-		$print_string .= "translocation_score:\t\t".$score_array[3]*$translocation_weight."\t(".$score_array[3].")"."\n";
-		$print_string .= "insertion_breakpoint_score:\t".$score_array[4]*$insertion_breakpoint_weight."\t(".$score_array[4].")"."\n";
-		$print_string .= "loh_score:\t\t\t".$score_array[5]*$loh_weight."\t(".$score_array[5].")"."\n";
+		$print_string .= "cnv_score:\t\t\t".$score_array[0]*$cnv_weight."\n";
+		$print_string .= "mutation_density_score:\t\t".$score_array[1]*$mutation_density_weight."\n";
+		$print_string .= "genome_localization_score:\t".$score_array[2]*$genome_localization_weight."\n";
+		$print_string .= "translocation_score:\t\t".$score_array[3]*$translocation_weight."\n";
+		$print_string .= "insertion_breakpoint_score:\t".$score_array[4]*$insertion_breakpoint_weight."\n";
+		$print_string .= "loh_score:\t\t\t".$score_array[5]*$loh_weight."\n";
 		
 		$print_string .= "\n";
 
@@ -2522,10 +2522,10 @@ sub analyze_suspect_regions {
 		$print_string .= "\n";
 
 		$print_string .= "density_of_translocation_breakpoints: $translocation_density\n";
-		$print_string .= "number_of_interchromosomal_translocation_chromosomes:\t$num_trans_chr\n";
+		$print_string .= "number_of_intertranslocational_chromosomes:\t$num_trans_chr\n";
 
 		if($num_trans_chr>0){
-			$print_string .= "interchromosomal_translocation_chromosomes:\n";
+			$print_string .= "intertranslocational_chromosomes:\n";
 			foreach my $key (sort {$intertranslocation_hash{$b} <=> $intertranslocation_hash{$a} } keys %intertranslocation_hash){
 				$print_string .= "\t$key:\t$intertranslocation_hash{$key}\n";
 				}
@@ -2728,7 +2728,7 @@ sub calculate_score{
 		}
 
 	#calculate overall score for region based on hallmark weights and scores
-	$final_score = ($cnv_score*$cnv_weight) + ($mutation_density_score*$chromosome_localization_weight) + ($genome_localization_score*$genome_localization_weight) + ($translocation_score*$translocation_weight) + ($insertion_breakpoint_score*$insertion_breakpoint_weight) + ($tp53_mutated*$tp53_mutated_weight) + ($loh_score*$loh_weight);
+	$final_score = ($cnv_score*$cnv_weight) + ($mutation_density_score*$mutation_density_weight) + ($genome_localization_score*$genome_localization_weight) + ($translocation_score*$translocation_weight) + ($insertion_breakpoint_score*$insertion_breakpoint_weight) + ($tp53_mutated*$tp53_mutated_weight) + ($loh_score*$loh_weight);
 
 	#push the hallmark scores into the score array
 	push (@score_array, ($cnv_score, $mutation_density_score, $genome_localization_score, $translocation_score, $insertion_breakpoint_score, $loh_score));
@@ -2851,7 +2851,6 @@ sub calculate_copy_number_scores {
 		$cnv_score += 1;
 		$cnv_score = 1 - (1/$cnv_score);
 		$cnv_score = $cnv_score/(scalar(keys %cnv_significant));
-		#$cnv_score = (1/(scalar(keys %cnv_significant)))*(0.25) + (1-(1/(1+log($cnv_score/(scalar(keys %cnv_significant)))/log(2))))*(0.75);
 		}
 
 	return ($cnv_score, \%cnv_number_hash, $cnv_switch_density);
@@ -2968,8 +2967,6 @@ sub calculate_region_mutation_density_score {
 	my $chis_stat;	#stores the chi squared statistic value
 
 	my $mutation_count = 0;		#stores the total mutation count in the region
-	my $cnv_count = 0;		#stores the number of cnv breakpoints in the region
-	my $trans_count = 0;		#stores the number of translocation breakpoints in the region
 	my $mutation_density = 0;	#store the mutation density of the region
 	my $mutation_density_score;	#stores the final score for the hallmark
 
@@ -2989,7 +2986,7 @@ sub calculate_region_mutation_density_score {
 				}
 
 			%cnv_hash = %{$chr_data[$i]};
-			$cnv_count += $cnv_hash{'BPcount'};
+			$mutation_count += $cnv_hash{'BPcount'};
 			}
 		}
 
@@ -3006,21 +3003,18 @@ sub calculate_region_mutation_density_score {
 				next;
 				}
 			%trans_hash = %{$chr_data[$i]};
-			$trans_count += $trans_hash{'BPcount'};
+			$mutation_count += $trans_hash{'BPcount'};
 			}
 		}
 
-	#divide the count by 2 to get the number of translocation events	
-	$trans_count = POSIX::ceil($trans_count/2);
-
-	#calculate the total number events in the region
-	$mutation_count = $cnv_count + $trans_count;
+	#divide the count by 2 to get the number of events	
+	$mutation_count = POSIX::ceil($mutation_count/2);
 
 	#calculate the mutation density for the region
 	$mutation_density = $mutation_count / ($end-$start);
 
 	#calculate the chi squared statistic
-	$chis_stat = abs(((log($mutation_density)-log($mean_chr_mutation_density))**2)/(log($mean_chr_mutation_density)));
+	$chis_stat = (($mutation_density-$mean_chr_mutation_density)**2)/($mean_chr_mutation_density);
 
 	#generate a p-value using the chi squared test
 	$mutation_density_score = 1-(Statistics::Distributions::chisqrprob(1,$chis_stat));
@@ -3177,8 +3171,7 @@ sub calculate_translocation_score {
 		for my $key (keys %trans_number_hash){
 			if(
 			   ( $SD==0 )||
-			   #( (($trans_number_hash{$key}-$mean)/$SD)>-2*$outlier_deviation)
-			   ( (($trans_number_hash{$key}-$mean)/$SD)>-1*$outlier_deviation)
+			   ( (($trans_number_hash{$key}-$mean)/$SD)>-2*$outlier_deviation)
 			  ){
 				push (@significant_chrs, $key);
 				}
@@ -3236,16 +3229,7 @@ sub calculate_translocation_score {
 
 		#final hallmark score calculation
 		$size = @significant_chrs;
-		#$translocation_score = (1/(1+(log($size)/log(4))))*(1-(1/(log(1+$weighted_sum)/log(2))));
-		#$translocation_score = (1/(1+(log($size)/log(4))))*(0.5)+(1-(1/(log(1+$weighted_sum)/log(2))))*(0.5);
-		#$translocation_score = (1-(1/(log(1+$weighted_sum)/log(2))))*(0.5);
-
-		if($size<8){
-			$translocation_score = (1-(0.15*($size-1)))*(1-(1/(log(1+$weighted_sum)/log(2))));
-			}
-		else{
-			$translocation_score = 0;
-			}
+		$translocation_score = (1/(1+(log($size)/log(4))))*(1-(1/(log(1+$weighted_sum)/log(2))));
 
 		if($translocation_score>=1){
 			print "score: ".$translocation_score."\n";
@@ -3776,105 +3760,15 @@ sub load_config_file {
 
 ShatterProof - a script for analyzing next-generation sequencing data
 
-=head1 SYNOPSIS
-
-use Shatterproof
-
 =head1 DESCRIPTION
 
-ShatterProof is a tool that can be used to analyze next generation sequencing data for signs of chromothripsis. Link to publication will be posted soon.
+TODO FILL ME IN
 
 =head1 README
 
-=head2 Input File Types
-ShatterProof can takes as input 4 different types of input files.  See the scripts/conversion_scripts directory for some Perl scripts which will convert some common tools' output the the required input formats.
-=head3 Translocation Input Files (.spt)
-Tab delimited columns
-First line is header line:
-#chr1   start   end     chr2    start   end     quality
-
-Example data entry line:
-1       1000    2000    4       4000    5000    78
-
-If no value is available for quality, use a “.” eg.:
-
-1       1000    2000    4       4000    5000    .
-
-
-=head3 Copy-Number Input Files (.spc)
-Tab delimited columns
-First line is header line:
-#chr    start   end     number  quality
-
-
-Example data entry line:
-12      2000    3000    2       63
-
-If no value is available for quality, use a “.” eg.:
-
-12      2000    3000    2       .
-
-=head3 Loss of Heterozygozity Input Files (.spl)
-Tab delimited columns
-First line is header line:
-#chr    start   end	quality
-
-
-Example data entry line:
-12      2000    3000	63
-
-If no value is available for quality, use a “.” eg.:
-
-12      2000    3000	.
-
-=head3 Insertion Input Files (.vcf)
-Additionally, ShatterProof accepts insertion calls in VCF files as input. See http://www.1000genomes.org/node/101 for details on the VCF file format.
-ShatterProof analyzes the CHROM and POS fields of these files. 
- 
-=head2 Installing ShatterProof
-To install this module type the following:
-
-   perl Makefile.PL
-   make
-   make test
-   make install
-
-=head2 Configuring ShatterProof
-See the config.pl file in the scripts directory for a sample ShatterProof configuration file.
-$bin_size: number (integer) of base pairs to include in each bin of the sliding window analysis
-$localization_window_size: number (integer) of bins to include in each window of the sliding window analysis
-$expected_mutation_density: a reference value (double) used in determining if the concentration of translocation events on a particular chromosome is higher than expected.
-$collapse_regions: 
-	flag variable
-
-	value 1: merge overlapping CNV regions that have the same copy number
-
-	value 0: do not merge overlapping CNV regions that have the same copy number. 	If such regions are found an error is thrown
-
-$outlier_deviations: the number of standard deviations away from the mean a value has to be in order to be considered non-significant. Used to identify highly mutated regions.
-$genome_localization_weight: weight given to the localization of mutations to one chromosome hallmark
-$chromosome_localization_weight: weight given to the localization of mutations to one area of a particular chromosome hallmark
-$cnv_weight: weight given to the concentrated CNV hallmark
-$translocation_weight: weight give to the concentrated translocations hallmark
-$insertion_breakpoint_weight: weight given the the short breakpoint insertions hallmark
-$loh_weight: weight given to the loss/retention of heterozygosity hallmark
-$tp53_mutated_weight: weight given to the TP53 mutation hallmark
-
-=head2 Running ShatterProof
-From the scripts directory run execute the shatterproof.pl file using Perl.
-Main Usage:
-perl -w shatterproof.pl --cnv <dir> --trans <dir> [--insrt <dir>] [--loh <dir>] [--tp53] --config <path> --output <dir>
- Arguments:
-
---cnv		Define the path to the directory containing the CNV input files
---trans		Define the path to the directory containing the Translocation input files
---insrt		Define the path to the directory containing the insertion VCF input files
---loh		Define the path to the directory containing the LOH input files
---tp53		Indicate that TP53 should be considered mutated, regardless of data
---config	Define the path to the ShatterProof config file
---output	Define the path to the directory where output should be placed
-dir		Path to a directory
-path		Path to a file
+TODO FILL ME IN
+If there is any text in this section, it will be extracted into
+a separate README file.
 
 =head1 PREREQUISITES
 strict;

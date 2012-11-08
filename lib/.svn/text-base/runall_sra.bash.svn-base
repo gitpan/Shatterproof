@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for sra in 7 8 9
+do
+	time perl -w shatterproof.pl --cnv /u/sgovind/sptest_data/sra/SRR49660$sra/cnv/ --trans /u/sgovind/sptest_data/sra/SRR49660$sra/trans/ --config /u/sgovind/SP/trunk/scripts/config.pl --output /u/sgovind/sptest_data/sra/SRR49660$sra/output/
+
+done

@@ -5,13 +5,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'Shatterproof',
     VERSION_FROM      => 'lib/Shatterproof.pm', # finds $VERSION
-    PREREQ_PM         => {
-				'Statistics::Distributions' => 1.02,
-				'Switch' => undef,
-				'File::Basename' => undef,
-				'List::Util' => undef,
-				'POSIX' => undef
-			 },
+    PREREQ_PM         => {Statistics::Distributions => 1.02},
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (AUTHOR         => 'Shaylan Govind <shaylan.govind@oicr.on.ca>') : ()),
 );
