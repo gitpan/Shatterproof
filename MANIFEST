@@ -1,5 +1,15 @@
 Changes
 Makefile.PL
 MANIFEST
+META.yml
 t/Shatterproof.t
 lib/Shatterproof.pm
+scripts/shatterproof.pl
+scripts/breakdancer_to_spt.pl
+scripts/cnver_to_spc.pl
+scripts/config.pl
+scripts/freec_to_spc.pl
+scripts/gasv_to_spt.pl
+scripts/oncoscan_to_spl.pl
+scripts/svdetect_to_spt.pl
+scripts/tigra_to_spt.pl

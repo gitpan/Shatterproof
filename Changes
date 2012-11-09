@@ -6,3 +6,6 @@ Revision history for Perl extension ShatterProof.
 
 0.002  Thur Nov 8 14:54:00 2012
 	- added missing dependency declaration on Switch
+
+0.003  Thur Nov 8 17:23:00 2012
+	- added missing dependency declaration on File::Basename, List::Util, POSIX
