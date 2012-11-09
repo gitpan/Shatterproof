@@ -23,4 +23,4 @@ requires:
   POSIX: 0
   Statistics::Distributions: 1.02
   Switch: 0
-version: 0.003
+version: 0.03

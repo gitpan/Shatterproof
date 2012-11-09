@@ -21,13 +21,13 @@ use POSIX;
 
 ### HISTORY #######################################################################################
 # Version       Date            Coder   	Comments
-# 0.001         2012/03/19      sgovind      	Versioning start point
-# 0.002		2012/04/03	sgovind		moved input validation methods and run methods
+# 0.01         	2012/03/19      sgovind      	Versioning start point
+# 0.02		2012/04/03	sgovind		moved input validation methods and run methods
 #						from shatterproof.pl to here
-# 0.003		2012/10/08	sgovind		Updated POD
+# 0.03		2012/10/08	sgovind		Updated POD
 #
 
-our $VERSION = '0.003';
+our $VERSION = '0.03';
 
 package Shatterproof;
 
@@ -96,7 +96,7 @@ our $tp53_mutated_weight; 			#the scoring formula weight given to the presents o
 
 ### SUB METHODS ###################################################################################
 
-=head2 Sub-Method: run
+#=head2 Sub-Method: run
 
 ### run ###########################################################################################
 # Description:
@@ -106,7 +106,7 @@ our $tp53_mutated_weight; 			#the scoring formula weight given to the presents o
 # Input variables:
 #	$argv_ref:	reference to @ARGV
 
-=cut
+#=cut
 sub run {
 
 	my $argv_ref = shift;		#parse parameters
@@ -345,7 +345,7 @@ sub run {
 
 	}#sub run
 
-=head2 Sub-Method: validate_input
+#=head2 Sub-Method: validate_input
 
 ### validate_input ################################################################################
 # Description:
@@ -361,7 +361,7 @@ sub run {
 #	$output_directory_ref:	reference to variable storing the output directory
 #	$config_file_path_ref:	reference to variable storing the path to the config file
 
-=cut
+#=cut
 sub validate_input {
 
 	#Parse parameters
@@ -461,7 +461,7 @@ sub validate_input {
 
 	}#sub validate_input
 
-=head2 Sub-Method: analyze_cnv_data
+#=head2 Sub-Method: analyze_cnv_data
 
 ### analyze_cnv_data ##############################################################################
 # Description:
@@ -476,7 +476,7 @@ sub validate_input {
 #	$bin_size:		stores the size of the bins which the chromosome will be divided into
 #	$tp53_mutated_ref:	reference to the tp53 mutated flag
 
-=cut
+#=cut
 sub analyze_cnv_data {
 
 	#Parse the parameters
@@ -696,7 +696,7 @@ sub analyze_cnv_data {
 
 	}#sub analyze_cnv_data
 
-=head2 Sub-Method: check_for_overlaps
+#=head2 Sub-Method: check_for_overlaps
 
 ### check_for_overlaps ############################################################################
 # Description:
@@ -710,7 +710,7 @@ sub analyze_cnv_data {
 #	$file_data_ref:	reference to an array storing all the data lines read in from the specific
 #			type of input file
 
-=cut
+#=cut
 sub check_for_overlaps {
 
 	my $type = shift;
@@ -837,7 +837,7 @@ sub check_for_overlaps {
 
 	}#sub check_for_overlaps
 
-=head2 Sub-Method: analyze_trans_data
+#=head2 Sub-Method: analyze_trans_data
 
 ### analyze_trans_data ############################################################################
 # Description:
@@ -853,7 +853,7 @@ sub check_for_overlaps {
 #	$bin_size:		stores the size of the bins which the chromosome will be divided into
 #	$tp53_mutated_ref:      reference to the tp53 mutated flag
 
-=cut
+#=cut
 sub analyze_trans_data {
 
 	#Parse the parameters
@@ -1146,7 +1146,7 @@ sub analyze_trans_data {
 	}#sub analyze_trans_data
 
 
-=head2 Sub-Method: analyze_insertion_data
+#=head2 Sub-Method: analyze_insertion_data
 
 ### analyze_insertion_data ##############################################################################
 # Description:
@@ -1164,7 +1164,7 @@ sub analyze_trans_data {
 #	$tp53_mutated_ref:      		reference to the tp53 mutated flag
 #
 
-=cut 
+#=cut 
 sub analyze_insertion_data {
 
 	#Parse Parameters
@@ -1353,7 +1353,7 @@ sub analyze_insertion_data {
 	}#sub analyze_insertion_data
 
 
-=head2 Sub-Method: analyze_loh_data
+#=head2 Sub-Method: analyze_loh_data
 
 ### analyze_loh_data ##############################################################################
 # Description:
@@ -1365,7 +1365,7 @@ sub analyze_insertion_data {
 #	$loh_files_array_ref:	reference to array containing all the LOH input files
 #
 
-=cut
+#=cut
 
 sub analyze_loh_data {
 
@@ -1515,7 +1515,7 @@ sub analyze_loh_data {
 
 
 
-=head2 Sub-Method: calculate_genome_localization
+#=head2 Sub-Method: calculate_genome_localization
 
 ### calculate_genome_localization #################################################################
 # Description:
@@ -1529,7 +1529,7 @@ sub analyze_loh_data {
 #						  of translocation events on each chromosome
 #
 
-=cut
+#=cut
 
 sub calculate_genome_localization {
 
@@ -1595,7 +1595,7 @@ sub calculate_genome_localization {
 	}#sub calculate_genome_localization
 
 
-=head2 Sub-Method: calculate_chromosome_localization
+#=head2 Sub-Method: calculate_chromosome_localization
 
 ### calculate_chromosome_localization #############################################################
 # Description:
@@ -1613,7 +1613,7 @@ sub calculate_genome_localization {
 #	$window_size:			number of bins to evaluate in each window
 #
 
-=cut 
+#=cut 
 sub calculate_chromosome_localization {
 
 	#parse parameters
@@ -2189,7 +2189,7 @@ sub calculate_chromosome_localization {
 	}#sub calculate_chromosome_localization
 
 
-=head2 Sub-Method: check_copy_number_count
+#=head2 Sub-Method: check_copy_number_count
 
 ### check_copy_number_count #######################################################################
 # Description:
@@ -2202,7 +2202,7 @@ sub calculate_chromosome_localization {
 #						of copy-number variation on each chromosome
 #
 
-=cut
+#=cut
 
 sub check_copy_number_count {
 
@@ -2236,7 +2236,7 @@ sub check_copy_number_count {
 		
 	}#sub check_copy_number_count
 
-=head2 Sub-Method: check_copy_number_switches
+#=head2 Sub-Method: check_copy_number_switches
 
 ### check_copy_number_switches ####################################################################
 # Description:
@@ -2249,7 +2249,7 @@ sub check_copy_number_count {
 #						of copy-number variation on each chromosome
 #
 
-=cut
+#=cut
 
 sub check_copy_number_switches {
 
@@ -2292,7 +2292,7 @@ sub check_copy_number_switches {
 		
 	}#sub check_copy_number_switches
 
-=head2 Sub-Method: calculate_interchromosomal_translocation_rate
+#=head2 Sub-Method: calculate_interchromosomal_translocation_rate
 
 ### calculate_interchromosomal_translocation_rate #################################################
 # Description:
@@ -2305,7 +2305,7 @@ sub check_copy_number_switches {
 #							translocations between each chromosome
 #
 
-=cut
+#=cut
 
 sub calculate_interchromosomal_translocation_rate {
 
@@ -2341,7 +2341,7 @@ sub calculate_interchromosomal_translocation_rate {
 	}#sub calculate_interchromosomal_translocation_rate
 
 
-=head2 Sub-Method: analyze_suspect_regions
+#=head2 Sub-Method: analyze_suspect_regions
 
 ### analyze_suspect_regions #######################################################################
 # Description:
@@ -2372,7 +2372,7 @@ sub calculate_interchromosomal_translocation_rate {
 #							each chromosome
 #
 
-=cut
+#=cut
 
 sub analyze_suspect_regions {
 
@@ -2584,7 +2584,7 @@ sub analyze_suspect_regions {
 	}#sub analyze_suspect_regions
 
 
-=head2 Sub-Method: analyze_likely_regions
+#=head2 Sub-Method: analyze_likely_regions
 
 ### analyze_likely_regions ########################################################################
 # Description:
@@ -2604,7 +2604,7 @@ sub analyze_suspect_regions {
 #	$bin_size:				stores the size of a single bin
 #
 
-=cut
+#=cut
 
 sub analyze_likely_regions {
 
@@ -2678,7 +2678,7 @@ sub analyze_likely_regions {
 	}#sub analyze_likely_regions
 
 
-=head2 Sub-Method: calculate_score
+#=head2 Sub-Method: calculate_score
 
 ### calculate_score ###############################################################################
 # Description:
@@ -2707,7 +2707,7 @@ sub analyze_likely_regions {
 #	$bin_size:					stores the size of a single bin
 #
 
-=cut
+#=cut
 
 sub calculate_score{
 
@@ -2774,7 +2774,7 @@ sub calculate_score{
 
 
 
-=head2 Sub-Method: calculate_copy_number_score
+#=head2 Sub-Method: calculate_copy_number_score
 
 ### calculate_copy_number_score  ##################################################################
 # Description:
@@ -2788,7 +2788,7 @@ sub calculate_score{
 #	$bin_size:			stores the size of single bin
 #
 
-=cut
+#=cut
 
 sub calculate_copy_number_scores {
 
@@ -2900,7 +2900,7 @@ sub calculate_copy_number_scores {
 	}#sub calculate_copy_number_scores
 
 
-=head2 Sub-Method: calculate_genome_localization_score
+#=head2 Sub-Method: calculate_genome_localization_score
 
 ### calculate_genome_localization_score  ##########################################################
 # Description:
@@ -2912,7 +2912,7 @@ sub calculate_copy_number_scores {
 #						chromosome
 #
 
-=cut
+#=cut
 
 sub calculate_genome_localization_score {
 
@@ -2972,7 +2972,7 @@ sub calculate_genome_localization_score {
 	}#sub calculate_genome_localization_score
 
 
-=head2 Sub-Method: calculate_region_mutation_density_score
+#=head2 Sub-Method: calculate_region_mutation_density_score
 
 ### calculate_region_mutation_density_score  ######################################################
 # Description:
@@ -2991,7 +2991,7 @@ sub calculate_genome_localization_score {
 #	$bin_size:				stores the size of single bin
 #
 
-=cut
+#=cut
 
 sub calculate_region_mutation_density_score {
 
@@ -3082,7 +3082,7 @@ sub calculate_region_mutation_density_score {
 	}#calculate_region_mutation_density_score
 
 
-=head2 Sub-Method: calculate_translocation_score
+#=head2 Sub-Method: calculate_translocation_score
 
 ### calculate_translocation_score #################################################################
 # Description:
@@ -3097,7 +3097,7 @@ sub calculate_region_mutation_density_score {
 #	$bin_size:			stores the size of single bin
 #
 
-=cut
+#=cut
 
 sub calculate_translocation_score {
 
@@ -3322,7 +3322,7 @@ sub calculate_translocation_score {
 	}#sub calculate_translocation_score
 
 
-=head2 Sub-Method: calculate_insertion_breakpoint_score
+#=head2 Sub-Method: calculate_insertion_breakpoint_score
 
 ### calculate_insertion_breakpoint_score ##########################################################
 # Description:
@@ -3339,7 +3339,7 @@ sub calculate_translocation_score {
 #	$bin_size:					stores the size of single bin
 #
 
-=cut
+#=cut
 
 sub calculate_insertion_breakpoint_score {
 
@@ -3417,7 +3417,7 @@ sub calculate_insertion_breakpoint_score {
 	}
 
 
-=head2 Sub-Method: calculate_loh_score
+#=head2 Sub-Method: calculate_loh_score
 
 ### calculate_loh_score ###########################################################################
 # Description:
@@ -3433,7 +3433,7 @@ sub calculate_insertion_breakpoint_score {
 #						chromosome
 #
 
-=cut
+#=cut
 
 sub calculate_loh_score {
 
@@ -3639,7 +3639,7 @@ sub calculate_loh_score {
 	}#sub calculate_loh_score
 
 
-=head2 Sub-Method: standard_deviation_and_mean
+#=head2 Sub-Method: standard_deviation_and_mean
 
 ### standard_deviation_and_mean ###################################################################
 # Description:
@@ -3650,7 +3650,7 @@ sub calculate_loh_score {
 #	$type:		0 indicates a hash, 1 indicates an array
 #	
 
-=cut
+#=cut
 
 sub standard_deviation_and_mean{
 
@@ -3862,7 +3862,7 @@ ShatterProof is a tool that can be used to analyze next generation sequencing da
 
 =head2 Input File Types
 
-ShatterProof can takes as input 4 different types of input files.  See the scripts/conversion_scripts directory for some Perl scripts which will convert some common tools' output the the required input formats.
+ShatterProof can takes as input 4 different types of input files.  See the scripts directory for some Perl scripts which will convert some common tools' output the the required input formats.
 
 =head3 Translocation Input Files (.spt)
 
@@ -3922,10 +3922,15 @@ To install this module type the following:
 =head2 Configuring ShatterProof
 
 See the config.pl file in the scripts directory for a sample ShatterProof configuration file.
+
 $bin_size: number (integer) of base pairs to include in each bin of the sliding window analysis
+
 $localization_window_size: number (integer) of bins to include in each window of the sliding window analysis
+
 $expected_mutation_density: a reference value (double) used in determining if the concentration of translocation events on a particular chromosome is higher than expected.
+
 $collapse_regions: 
+
 	flag variable
 
 	value 1: merge overlapping CNV regions that have the same copy number
@@ -3933,29 +3938,47 @@ $collapse_regions:
 	value 0: do not merge overlapping CNV regions that have the same copy number. 	If such regions are found an error is thrown
 
 $outlier_deviations: the number of standard deviations away from the mean a value has to be in order to be considered non-significant. Used to identify highly mutated regions.
+
 $genome_localization_weight: weight given to the localization of mutations to one chromosome hallmark
+
 $chromosome_localization_weight: weight given to the localization of mutations to one area of a particular chromosome hallmark
+
 $cnv_weight: weight given to the concentrated CNV hallmark
+
 $translocation_weight: weight give to the concentrated translocations hallmark
+
 $insertion_breakpoint_weight: weight given the the short breakpoint insertions hallmark
+
 $loh_weight: weight given to the loss/retention of heterozygosity hallmark
+
 $tp53_mutated_weight: weight given to the TP53 mutation hallmark
 
 =head2 Running ShatterProof
 
 From the scripts directory run execute the shatterproof.pl file using Perl.
+
 Main Usage:
+
 perl -w shatterproof.pl --cnv <dir> --trans <dir> [--insrt <dir>] [--loh <dir>] [--tp53] --config <path> --output <dir>
+
  Arguments:
 
 --cnv		Define the path to the directory containing the CNV input files
+
 --trans		Define the path to the directory containing the Translocation input files
+
 --insrt		Define the path to the directory containing the insertion VCF input files
+
 --loh		Define the path to the directory containing the LOH input files
+
 --tp53		Indicate that TP53 should be considered mutated, regardless of data
+
 --config	Define the path to the ShatterProof config file
+
 --output	Define the path to the directory where output should be placed
+
 dir		Path to a directory
+
 path		Path to a file
 
 =head1 PREREQUISITES
@@ -3968,14 +3991,6 @@ File::Basename;
 List::Util qw[min max];
 Statistics::Distributions;
 POSIX
-
-=pod OSNAMES
-
-any
-
-=pod SCRIPT CATEGORIES
-
-CPAN
 
 =cut
 

@@ -1,11 +1,11 @@
 Revision history for Perl extension ShatterProof.
 
-0.001  Tue Sep 25 16:20:41 2012
+0.01  Tue Sep 25 16:20:41 2012
 	- original version; created by h2xs 1.23 with options
 		-AXc -n ShatterProof
 
-0.002  Thur Nov 8 14:54:00 2012
+0.02  Thur Nov 8 14:54:00 2012
 	- added missing dependency declaration on Switch
 
-0.003  Thur Nov 8 17:23:00 2012
+0.03  Thur Nov 8 17:23:00 2012
 	- added missing dependency declaration on File::Basename, List::Util, POSIX
