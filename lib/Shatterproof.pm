@@ -27,9 +27,10 @@ use POSIX;
 # 0.003		2012/10/08	sgovind		Updated POD
 # 0.04		2012/11/25	sgovind		Stable build before changing translocation scoring equation
 # 0.05		2012/12/26	sgovind		See change log for details
+# 0.06		2012/12/27	sgovind		Added additional documentation for new config variable
 #
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 package Shatterproof;
 
@@ -4000,6 +4001,8 @@ $collapse_regions:
 	value 0: do not merge overlapping CNV regions that have the same copy number. 	If such regions are found an error is thrown
 
 $outlier_deviations: the number of standard deviations away from the mean a value has to be in order to be considered non-significant. Used to identify highly mutated regions.
+
+$translocation_cut_off_count: the maximum number of translocation chromosomes to tolerate before the translocation score for a region is set to 0.
 
 $genome_localization_weight: weight given to the localization of mutations to one chromosome hallmark
 

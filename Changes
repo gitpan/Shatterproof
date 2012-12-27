@@ -23,3 +23,7 @@ Revision history for Perl extension ShatterProof.
 	 mutations that are discovered will be reported but will have not affect
 	 on scores
 	-added sample data directory with example run guide
+
+0.06 Sun Dec 27  13:00:00 2012
+	-added additional documentation for new translocation cut-off config
+	 variable
