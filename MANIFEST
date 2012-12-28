@@ -2,7 +2,6 @@ Changes
 Makefile.PL
 MANIFEST
 META.yml
-README
 t/Shatterproof.t
 lib/Shatterproof.pm
 scripts/shatterproof.pl
@@ -18,4 +17,4 @@ sample_data/cnv/sample_cnv.spc
 sample_data/trans/sample_trans.spc
 sample_data/loh/sample_loh.spl
 sample_data/indels/sample_indel.vcf
-sample_data/output
+sample_data/example_guide.txt

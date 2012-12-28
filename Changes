@@ -27,3 +27,6 @@ Revision history for Perl extension ShatterProof.
 0.06 Sun Dec 27  13:00:00 2012
 	-added additional documentation for new translocation cut-off config
 	 variable
+
+0.07 Sun Dec 27  14:00:00 2012
+	-added example guide for provided sample data

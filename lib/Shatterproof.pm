@@ -28,9 +28,10 @@ use POSIX;
 # 0.04		2012/11/25	sgovind		Stable build before changing translocation scoring equation
 # 0.05		2012/12/26	sgovind		See change log for details
 # 0.06		2012/12/27	sgovind		Added additional documentation for new config variable
+# 0.07		2012/12/27	sgovind		Added example guide for provided sample data
 #
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 package Shatterproof;
 
@@ -3920,12 +3921,15 @@ ShatterProof is a tool that can be used to analyze next generation sequencing da
 =head1 README
 
 =head2 Installing ShatterProof
+
 To install this module type the following:
 
    perl Makefile.PL
    make
    make test
    make install
+
+Make sure that you have admin permission rights when running the previous commands.
 
 =head2 Input File Types
 
