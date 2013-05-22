@@ -1,4 +1,15 @@
 #!/usr/local/bin/perl
+#The ShatterProof package is copyright (c) 2013 Ontario Institute for Cancer Research (OICR).
+#
+#This package and its accompanying libraries is free software; you can redistribute it and/or modify it under the terms of the GPL (either version 1, or at your option, any later version) or the Artistic License 2.0.  Refer to LICENSE for the full license text.
+
+#OICR makes no representations whatsoever as to the SOFTWARE contained herein.  It is experimental in nature and is provided WITHOUT WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE OR ANY OTHER WARRANTY, EXPRESS OR IMPLIED.  CSHL MAKES NO REPRESENTATION OR WARRANTY THAT THE USE OF THIS SOFTWARE WILL NOT INFRINGE ANY PATENT OR OTHER PROPRIETARY RIGHT.
+
+#By downloading this SOFTWARE, your Institution hereby indemnifies OICR against any loss, claim, damage or liability, of whatsoever kind or
+#nature, which may arise from your Institution's respective use, handling or storage of the SOFTWARE.
+
+#If publications result from research using this SOFTWARE, we ask that the Ontario Institute for Cancer Research be acknowledged and/or credit be given to OICR scientists, as scientifically appropriate.
+
 ### Shatterproof.pm ###############################################################################
 # ShatterProof is a tool that can be used to analyze next generation sequencing data for signs 
 # of chromothripsis. 
@@ -12,7 +23,8 @@ use Carp;
 
 use vars qw($VERSIONS);
 
-use Switch;
+use feature 'switch';
+#use Switch;
 use File::Basename;
 use List::Util qw[min max];
 use Statistics::Distributions;
@@ -29,11 +41,30 @@ use POSIX;
 # 0.05		2012/12/26	sgovind		See change log for details
 # 0.06		2012/12/27	sgovind		Added additional documentation for new config variable
 # 0.07		2012/12/27	sgovind		Added example guide for provided sample data
-#
+# 0.08		2013/05/22	sgovind		Added EXPORT code for test case, added minor error checking
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 package Shatterproof;
+use Exporter;
+our @ISA = 'Exporter';
+our @EXPORT = qw(
+			$bin_size
+			$genome_cnv_data_hash_ref
+			$chromosome_copy_number_count_hash_ref
+			$chromosome_cnv_breakpoints_hash_ref
+			$tp53_mutation_found
+			$genome_trans_data_hash_ref
+			$chromosome_translocation_count_hash_ref
+			$genome_trans_breakpoints_hash_ref
+			$genome_mutation_density_hash_ref
+			$suspect_regions_array_ref
+			$likely_regions_array_ref
+			$genome_cnv_data_windows_hash_ref
+			$genome_trans_data_windows_hash_ref
+			$genome_mutation_data_windows_hash_ref
+			$localization_window_size
+		);
 
 ### Global Variables ##############################################################################
 my $pos = 0;	#used to parse command line variables
@@ -223,7 +254,9 @@ sub run {
 	validate_input(\@argv, \$cnv_directory, \$trans_directory, \$insertion_directory, \$loh_directory, \$tp53_mutated, \$output_directory, \$config_file_path);
 
 	#Load the values from the config file
-	load_config_file($config_file_path);
+	if(load_config_file($config_file_path)!=1){
+		die("ERROR - could not load config file\n");
+		}
 
 	print "CNV dir:\t$cnv_directory\n";
 	print "Trans dir:\t$trans_directory\n";
@@ -387,10 +420,10 @@ sub validate_input {
 	$ARGC = @argv;
 
 	#Parse the command line arguements
-	switch($ARGC){
-		case 0 { usage(0); }	#Print error message if no arguements were entered
+	given ($ARGC) {
+		when (/^0$/) { usage(0); }	#Print error message if no arguements were entered
 
-		case 1 {		#Check for help option
+		when (/^1$/) {		#Check for help option
 			if($argv[0] eq "--help"){
 				man_text();
 				}
@@ -399,7 +432,7 @@ sub validate_input {
 				}
 		       }#case 1
 
-		else   {
+		default   {
 
 			if($argv[$pos] eq "--cnv"){	#Check for the cnv input directory option, this field is mandatory
 				next_arg(2);
@@ -472,14 +505,11 @@ sub validate_input {
 				}
 
 			#Check that there are no other command line arguments
-			if($pos == $ARGC-1){
-				last;
-				}
-			else{
+			if($pos != $ARGC-1){
 				usage(18);
 				}
-		       }#else case
-		}#switch($ARGC)
+		       }#default case
+		}#given ($ARGC)
 
 	}#sub validate_input
 
@@ -556,6 +586,10 @@ sub analyze_cnv_data {
 					);
 
 	#Read the contents of the cnv files into memory
+	if($#cnv_files==-1){
+		die "ERROR: no cnv files found in analyze_cnv_data\n";
+		}
+
 	foreach my $file (@cnv_files){
 		#Open the file
 		open ($CURRENT_FILE, "<", $file) or die "ERROR: could not open file at path $file\n";
@@ -623,7 +657,7 @@ sub analyze_cnv_data {
 
 		#Ensure that the chromosome value is valid
 		if(!($file_data[$n][0] =~ m/^(chr)?(1[0-9]|2[0-2]|X|Y|[1-9])$/)){
-			die "WARNING: invalid chromosome field detected, line skipped: @{$file_data[$n]}\n";
+			die "ERROR: invalid line found in CNV input file: @{$file_data[$n]}\n";
 			}
 
 		#Parse the chromosome
@@ -937,6 +971,10 @@ sub analyze_trans_data {
 
 
 	#Read the contents of the cnv files into memory
+	if($#trans_files==-1){
+		die "ERROR: no trans files found in analyze_trans_data\n";
+		}
+
 	foreach my $file (@trans_files){
 		#open the file
 		open ($CURRENT_FILE, "<", $file) or die "ERROR: could not open file at path $file\n";
@@ -965,7 +1003,7 @@ sub analyze_trans_data {
 
 			#validate the format of the data line
 			if(!($line =~ m/^(chr)?(1[0-9]|2[0-2]|X|Y|[1-9])\t[0-9]+\t[0-9]+\t(chr)?(1[0-9]|2[0-2]|X|Y|[1-9])\t[0-9]+\t[0-9]+\t([0-9]+|\.)$/)){
-				#warn "WARNING: invalid line found and skipped: ($line) in file $file\n";
+				die "ERROR: invalid line found in translocation input file: ($line) in file $file\n";
 				next;
 				}
 
@@ -3818,26 +3856,26 @@ sub usage {
 
 	print "u $usage_msg \n";
 	
-	switch($usage_msg){
-		case 0 	{ print "ERROR: missing arguments\n"; 			}
-		case 1 	{ print "ERROR: 2nd argument missing\n"; 		}
-		case 2 	{ print "ERROR: CNV directory missing\n"; 		}
-		case 3 	{ print "ERROR: --trans option missing\n"		}
-		case 4 	{ print "ERROR: --cnv option missing\n"			}
-		case 5 	{ print "ERROR: Translocation directory missing\n"	}
-		case 6 	{ print "ERROR: --config option missing\n"		}
-		case 7 	{ print "ERROR: --trans option missing\n"		}
-		case 8 	{ print "ERROR: insertion directory missing\n"		}
-		case 9 	{ print "ERROR: --config option missing\n"		}
-		case 10 { print "ERROR: LOH directory missing \n"		}
-		case 11 { print "ERROR: --config option missing\n"		}
-		case 12 { print "ERROR: --config option missing\n"		}
-		case 13 { print "ERROR: Path to config file missing\n"		}
-		case 14 { print "ERROR: --output option missing\n"		}
-		case 15 { print "ERROR: --config option missing\n"		}
-		case 16 { print "ERROR: Output directory missing\n"		}
-		case 17 { print "ERROR: --output option missing\n"		}
-		case 18 { print "ERROR: too many arguments\n"			}
+	given($usage_msg){
+		when (/^0/) 	{ print "ERROR: missing arguments\n"; 			}
+		when (/^1/) 	{ print "ERROR: 2nd argument missing\n"; 		}
+		when (/^2/) 	{ print "ERROR: CNV directory missing\n"; 		}
+		when (/^3/) 	{ print "ERROR: --trans option missing\n"		}
+		when (/^4/) 	{ print "ERROR: --cnv option missing\n"			}
+		when (/^5/) 	{ print "ERROR: Translocation directory missing\n"	}
+		when (/^6/) 	{ print "ERROR: --config option missing\n"		}
+		when (/^7/) 	{ print "ERROR: --trans option missing\n"		}
+		when (/^8/) 	{ print "ERROR: insertion directory missing\n"		}
+		when (/^9/) 	{ print "ERROR: --config option missing\n"		}
+		when (/^10/) 	{ print "ERROR: LOH directory missing \n"		}
+		when (/^11/) 	{ print "ERROR: --config option missing\n"		}
+		when (/^12/) 	{ print "ERROR: --config option missing\n"		}
+		when (/^13/) 	{ print "ERROR: Path to config file missing\n"		}
+		when (/^14/) 	{ print "ERROR: --output option missing\n"		}
+		when (/^15/) 	{ print "ERROR: --config option missing\n"		}
+		when (/^16/) 	{ print "ERROR: Output directory missing\n"		}
+		when (/^17/) 	{ print "ERROR: --output option missing\n"		}
+		when (/^18/) 	{ print "ERROR: too many arguments\n"			}
 		}
 	print "Try perl -w shatteproof.pl --help\n";
 	exit 0;
@@ -3895,9 +3933,10 @@ sub load_config_file {
         my $CONFIG;
         open($CONFIG, "<","$path") or die "COULD NOT OPEN CONFIG FILE at path: $path \n";
         eval (<$CONFIG>) while (!eof($CONFIG));
-        close($CONFIG);
+	close($CONFIG);
 
         print " - Done\n";
+	1;
         }#sub load_config_file
 
 =head1 NAME

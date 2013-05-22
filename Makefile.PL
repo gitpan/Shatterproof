@@ -7,10 +7,13 @@ WriteMakefile(
     VERSION_FROM      => 'lib/Shatterproof.pm', # finds $VERSION
     PREREQ_PM         => {
 				'Statistics::Distributions' => 1.02,
-				'Switch' => undef,
-				'File::Basename' => undef,
-				'List::Util' => undef,
-				'POSIX' => undef
+				'File::Basename' => 2.00,
+				'List::Util' => 1.00,
+				'POSIX' => 1.00,
+				'JSON' => 2.00,
+				'Test::More' => 0,
+				'Test::Exception' => 0,
+				'Test::Deep' => 0
 			 },
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (AUTHOR         => 'Shaylan Govind <shaylan.govind@oicr.on.ca>') : ()),

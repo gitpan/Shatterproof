@@ -11,9 +11,6 @@
 use warnings;
 use strict;
 
-#push (@INC, '/u/sgovind/BoutrosLab/Algorithm Development/ChromothripsisDetector/trunk/Shatterproof-0.001/lib');
-#require '/u/sgovind/BoutrosLab/Algorithm Development/ChromothripsisDetector/trunk/Shatterproof-0.001/lib';
-
 use Shatterproof;
 
 ### MAIN PROGRAM ##################################################################################

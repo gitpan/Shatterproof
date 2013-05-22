@@ -6,8 +6,8 @@ build_requires:
   ExtUtils::MakeMaker: 0
 configure_requires:
   ExtUtils::MakeMaker: 0
-dynamic_config: 0
-generated_by: 'ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112150'
+dynamic_config: 1
+generated_by: 'ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.130880'
 license: unknown
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -18,9 +18,12 @@ no_index:
     - t
     - inc
 requires:
-  File::Basename: 0
-  List::Util: 0
-  POSIX: 0
+  File::Basename: 2
+  JSON: 2
+  List::Util: 1
+  POSIX: 1
   Statistics::Distributions: 1.02
-  Switch: 0
-version: 0.07
+  Test::Deep: 0
+  Test::Exception: 0
+  Test::More: 0
+version: 0.08
