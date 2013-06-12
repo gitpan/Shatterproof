@@ -13,6 +13,9 @@ use Test::More tests => 2;
 use Test::Exception;
 use Test::Deep;
 
+use lib dirname(__FILE__);
+
+use SPtesting;
 use Shatterproof;
 
 my $dir = dirname(__FILE__);
@@ -31,7 +34,6 @@ my @cnv_files;
 $cnv_files[0] = "$dir/spc/testing_cnv_1.spc";
 $cnv_files[1] = "$dir/spc/testing_cnv_2.spc";
 
-
 #create output directory
 mkdir ("$output_directory",0770) unless (-d "$output_directory");
 
@@ -48,7 +50,7 @@ Shatterproof::calculate_interchromosomal_translocation_rate($output_directory, $
 #check output file
 my $test_file;
 my $ref_file;
-open ($test_file, "$dir/output/interchromosomal_translocation_rate.log");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/interchromosomal_translocation_rate.log");
 open ($ref_file, "$dir/ref/interchromosomal_translocation_rate.log.ref");
 ok(compare($test_file, $ref_file)==0, 'calculate_interchromosomal_translocation_rate-1');
 close($test_file);

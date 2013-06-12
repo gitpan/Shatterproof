@@ -4,7 +4,7 @@
       "Shaylan Govind <shaylan.govind@oicr.on.ca>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.130880",
+   "generated_by" : "ExtUtils::MakeMaker version 6.66, CPAN::Meta::Converter version 2.112621",
    "license" : [
       "unknown"
    ],
@@ -22,12 +22,12 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "0"
+            "ExtUtils::MakeMaker" : 0
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "0"
+            "ExtUtils::MakeMaker" : 0
          }
       },
       "runtime" : {
@@ -37,12 +37,12 @@
             "List::Util" : "1",
             "POSIX" : "1",
             "Statistics::Distributions" : "1.02",
-            "Test::Deep" : "0",
-            "Test::Exception" : "0",
-            "Test::More" : "0"
+            "Test::Deep" : 0,
+            "Test::Exception" : 0,
+            "Test::More" : 0
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.08"
+   "version" : "0.09"
 }

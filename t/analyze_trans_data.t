@@ -13,6 +13,9 @@ use Test::More tests => 12;
 use Test::Exception;
 use Test::Deep;
 
+use lib dirname(__FILE__);
+
+use SPtesting;
 use Shatterproof;
 
 my $dir = dirname(__FILE__);
@@ -41,17 +44,17 @@ ok(Shatterproof::load_config_file($config_file_path),'load_config_file');
 open(FILE, "<", "$dir/json/genome_trans_data_hash_ref_test_1.json");
 my $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($test1_json, $genome_trans_data_hash_ref, 'analyze_trans_data-1-1-file-valid_input-no_tp53');
+cmp_deeply($genome_trans_data_hash_ref,$test1_json, 'analyze_trans_data-1-1-file-valid_input-no_tp53');
 
 open(FILE, "<", "$dir/json/chromosome_translocation_count_hash_ref_test_1.json");
 $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($test1_json, $chromosome_translocation_count_hash_ref, 'analyze_trans_data-1-2-file-valid_input-no_tp53');
+cmp_deeply($chromosome_translocation_count_hash_ref,$test1_json, 'analyze_trans_data-1-2-file-valid_input-no_tp53');
 
 open(FILE, "<", "$dir/json/genome_trans_breakpoints_hash_ref_test_1.json");
 $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($test1_json, $genome_trans_breakpoints_hash_ref, 'analyze_trans_data-1-3-file-valid_input-no_tp53');
+cmp_deeply($genome_trans_breakpoints_hash_ref,$test1_json, 'analyze_trans_data-1-3-file-valid_input-no_tp53');
 
 my $test_file;
 my $ref_file;
@@ -91,7 +94,7 @@ dies_ok(sub{Shatterproof::analyze_trans_data($output_directory, \@trans_files, $
 @trans_files = ();
 $trans_files[0] = "$dir/spt/testing_trans_tp53.spt";
 Shatterproof::analyze_trans_data($output_directory, \@trans_files, $bin_size, \$tp53_mutation_found);
-open ($test_file, "$dir/output/TP53/TP53.spt");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/TP53/TP53.spt");
 open ($ref_file, "$dir/ref/TP53.spt.ref");
 ok(compare($test_file, $ref_file)==0, 'analyze_trans_data-6-1_tp53-file');
 ok($tp53_mutation_found==1,'analyze_trans_data-6-2_tp53-file');

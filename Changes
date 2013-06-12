@@ -33,3 +33,6 @@ Revision history for Perl extension ShatterProof.
 
 0.08 Wed May 22 13:00:00 2013
 	-added testing package
+
+0.09 Mon Jun 10 14:00:00 2013
+	-updates to testing package

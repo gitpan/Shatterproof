@@ -13,6 +13,9 @@ use Test::More tests => 15;
 use Test::Exception;
 use Test::Deep;
 
+use lib dirname(__FILE__);
+
+use SPtesting;
 use Shatterproof;
 
 my $dir = dirname(__FILE__);
@@ -22,7 +25,7 @@ my $output_directory = "$dir/output/";
 
 $tp53_mutation_found = 0;
 
-#populate 	input file arrays
+#populate input file arrays
 my @trans_files;
 $trans_files[0] = "$dir/spt/testing_trans_1.spt";
 $trans_files[1] = "$dir/spt/testing_trans_2.spt";
@@ -30,7 +33,6 @@ $trans_files[1] = "$dir/spt/testing_trans_2.spt";
 my @cnv_files;
 $cnv_files[0] = "$dir/spc/testing_cnv_1.spc";
 $cnv_files[1] = "$dir/spc/testing_cnv_2.spc";
-
 
 #create output directory
 mkdir ("$output_directory",0770) unless (-d "$output_directory");
@@ -53,80 +55,81 @@ ok(Shatterproof::load_config_file($config_file_path),'load_config_file');
 open(FILE, "<", "$dir/json/suspect_regions_array_ref.json");
 my $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($test1_json, $suspect_regions_array_ref, "calculate_chromosome_localization-1");
+cmp_deeply($suspect_regions_array_ref, $test1_json, "calculate_chromosome_localization-1");
 
 open(FILE, "<", "$dir/json/likely_regions_array_ref.json");
 $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($test1_json, $likely_regions_array_ref, "calculate_chromosome_localization-2");
+cmp_deeply($likely_regions_array_ref, $test1_json, "calculate_chromosome_localization-2");
 
 open(FILE, "<", "$dir/json/genome_cnv_data_windows_hash_ref.json");
 $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($test1_json, $genome_cnv_data_windows_hash_ref, "calculate_chromosome_localization-3");
+cmp_deeply($genome_cnv_data_windows_hash_ref, $test1_json, "calculate_chromosome_localization-3");
 
 open(FILE, "<", "$dir/json/genome_trans_data_windows_hash_ref.json");
 $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($test1_json, $genome_trans_data_windows_hash_ref, "calculate_chromosome_localization-4");
+cmp_deeply($genome_trans_data_windows_hash_ref, $test1_json, "calculate_chromosome_localization-4");
 
 open(FILE, "<", "$dir/json/genome_mutation_data_windows_hash_ref.json");
 $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($test1_json, $genome_mutation_data_windows_hash_ref, "calculate_chromosome_localization-5");
+cmp_deeply($genome_mutation_data_windows_hash_ref, $test1_json, "calculate_chromosome_localization-5");
 
 #compare output files
 my $test_file;
 my $ref_file;
-open ($test_file, "$dir/output/mutation_clustering/cnv/chr10_cnv_localization.log");
+
+$test_file = SPtesting::test_open ($test_file, "$dir/output/mutation_clustering/cnv/chr10_cnv_localization.log");
 open ($ref_file, "$dir/ref/chr10_cnv_localization.log.ref");
 ok(compare($test_file, $ref_file)==0, "calculate_chromosome_localization-6");
 close($test_file);
 close($ref_file);
 
-open ($test_file, "$dir/output/mutation_clustering/cnv/chr11_cnv_localization.log");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/mutation_clustering/cnv/chr11_cnv_localization.log");
 open ($ref_file, "$dir/ref/chr11_cnv_localization.log.ref");
 ok(compare($test_file, $ref_file)==0, "calculate_chromosome_localization-7");
 close($test_file);
 close($ref_file);
 
-open ($test_file, "$dir/output/mutation_clustering/cnv/chr1_cnv_localization.log");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/mutation_clustering/cnv/chr1_cnv_localization.log");
 open ($ref_file, "$dir/ref/chr1_cnv_localization.log.ref");
 ok(compare($test_file, $ref_file)==0, "calculate_chromosome_localization-8");
 close($test_file);
 close($ref_file);
 
-open ($test_file, "$dir/output/mutation_clustering/translocations/chr3_translocation_localization.log");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/mutation_clustering/translocations/chr3_translocation_localization.log");
 open ($ref_file, "$dir/ref/chr3_translocation_localization.log.ref");
 ok(compare($test_file, $ref_file)==0, "calculate_chromosome_localization-9");
 close($test_file);
 close($ref_file);
 
-open ($test_file, "$dir/output/mutation_clustering/translocations/chr2_translocation_localization.log");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/mutation_clustering/translocations/chr2_translocation_localization.log");
 open ($ref_file, "$dir/ref/chr2_translocation_localization.log.ref");
 ok(compare($test_file, $ref_file)==0, "calculate_chromosome_localization-10");
 close($test_file);
 close($ref_file);
 
-open ($test_file, "$dir/output/mutation_clustering/translocations/chr21_translocation_localization.log");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/mutation_clustering/translocations/chr21_translocation_localization.log");
 open ($ref_file, "$dir/ref/chr21_translocation_localization.log.ref");
 ok(compare($test_file, $ref_file)==0, "calculate_chromosome_localization-11");;
 close($test_file);
 close($ref_file);
 
-open ($test_file, "$dir/output/mutation_clustering/all_types/chr4_mutation_localization.log");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/mutation_clustering/all_types/chr4_mutation_localization.log");
 open ($ref_file, "$dir/ref/chr4_mutation_localization.log.ref");
 ok(compare($test_file, $ref_file)==0, "calculate_chromosome_localization-12");
 close($test_file);
 close($ref_file);
 
-open ($test_file, "$dir/output/mutation_clustering/all_types/chrX_mutation_localization.log");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/mutation_clustering/all_types/chrX_mutation_localization.log");
 open ($ref_file, "$dir/ref/chrX_mutation_localization.log.ref");
 ok(compare($test_file, $ref_file)==0, "calculate_chromosome_localization-13");
 close($test_file);
 close($ref_file);
 
-open ($test_file, "$dir/output/mutation_clustering/all_types/chrY_mutation_localization.log");
+$test_file = SPtesting::test_open ($test_file, "$dir/output/mutation_clustering/all_types/chrY_mutation_localization.log");
 open ($ref_file, "$dir/ref/chrY_mutation_localization.log.ref");
 ok(compare($test_file, $ref_file)==0, "calculate_chromosome_localization-14");
 close($test_file);

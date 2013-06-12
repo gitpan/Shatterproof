@@ -42,8 +42,9 @@ use POSIX;
 # 0.06		2012/12/27	sgovind		Added additional documentation for new config variable
 # 0.07		2012/12/27	sgovind		Added example guide for provided sample data
 # 0.08		2013/05/22	sgovind		Added EXPORT code for test case, added minor error checking
+# 0.09		2013/06/10	sgovind		Minor changes to accomodate testing
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 package Shatterproof;
 use Exporter;
@@ -1881,7 +1882,7 @@ sub calculate_chromosome_localization {
 					$prev_value = $past_region_hash{'BPcount'};
 					}
 
-				#get the count from the bin follow the last bin in the previous window
+				#get the count from the bin following the last bin in the previous window
 				if(defined($current_chr_data[$chr_pos+($window_size-1)])){
 					%next_region_hash = %{$current_chr_data[$chr_pos+($window_size-1)]};
 					$next_value = $next_region_hash{'BPcount'};	
@@ -2700,6 +2701,8 @@ sub analyze_likely_regions {
 
 	my $OUTPUT_FILE;
 
+	my @return_vals;
+
 	my @likely_region_data = ();	#stores start, end, chromsome and mutation density for each region
 
 	#check that the likely region array is not malformed, should contain sets of 3 elements
@@ -2749,9 +2752,11 @@ sub analyze_likely_regions {
 
 		print $OUTPUT_FILE "\n";
 		print $OUTPUT_FILE "$chr\t$start\t$end\t$region_density";
+		push (@return_vals,$chr,$start,$end,$region_density);
 		}
 
 	close($OUTPUT_FILE);
+	return(\@return_vals);
 	}#sub analyze_likely_regions
 
 

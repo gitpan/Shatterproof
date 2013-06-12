@@ -7,11 +7,15 @@ use strict;
 use File::Path qw(remove_tree);
 use File::Compare;
 use File::Basename;
+use JSON qw[decode_json];
 
 use Test::More tests => 2;
 use Test::Exception;
 use Test::Deep;
 
+use lib dirname(__FILE__);
+
+use SPtesting;
 use Shatterproof;
 
 my $dir = dirname(__FILE__);
@@ -29,7 +33,6 @@ $trans_files[1] = "$dir/spt/testing_trans_2.spt";
 my @cnv_files;
 $cnv_files[0] = "$dir/spc/testing_cnv_1.spc";
 $cnv_files[1] = "$dir/spc/testing_cnv_2.spc";
-
 
 #create output directory
 mkdir ("$output_directory",0770) unless (-d "$output_directory");
@@ -51,16 +54,10 @@ $genome_mutation_density_hash_ref = Shatterproof::calculate_genome_localization(
 ($suspect_regions_array_ref, $likely_regions_array_ref, $genome_cnv_data_windows_hash_ref, $genome_trans_data_windows_hash_ref, $genome_mutation_data_windows_hash_ref) = Shatterproof::calculate_chromosome_localization($output_directory, $genome_cnv_data_hash_ref, $genome_trans_data_hash_ref, $bin_size, $localization_window_size);
 
 ##### test analyze_likely_regions ######################################
-Shatterproof::analyze_likely_regions($output_directory, $likely_regions_array_ref, $genome_mutation_density_hash_ref, $genome_cnv_data_hash_ref, $genome_trans_data_hash_ref, $bin_size, $localization_window_size);
+my $likely_regions;
+$likely_regions = Shatterproof::analyze_likely_regions($output_directory, $likely_regions_array_ref, $genome_mutation_density_hash_ref, $genome_cnv_data_hash_ref, $genome_trans_data_hash_ref, $bin_size, $localization_window_size);
 
-#check output file
-my $test_file;
-my $ref_file;
-open ($test_file, "$dir/output/suspect_regions/likely_regions.log");
-open ($ref_file, "$dir/ref/likely_regions.log.ref");
-ok(compare($test_file, $ref_file)==0, 'analyze_likely_regions-1');
-close($test_file);
-close($ref_file);
+cmp_deeply($likely_regions, ["4","39099000","49099000",num(2.2e-06,1),"Y","37000","10043000",num(1.39916050369778e-06,1),"16","33979000","43987000",num(1.19904076738609e-06,1),"4","49517000","59637000",num(1.18577075098814e-06,1),"10","29112000","39125000",num(1.09857185658644e-06,1),"4","0","13817000",num(1.08561916479699e-06,1),"6","159333000","170897000",num(1.03770321687997e-06,1),"16","23954000","33972000",num(9.98203234178479e-07,1),"10","39080000","49125000",num(9.95520159283226e-07,1),"7","51750000","71559000",num(8.07713665505578e-07,1),"Y","13869000","23869000",num(7e-07,1),"21","775000","20698000",num(3.51352707925513e-07,1),"2","81795000","99865000",num(3.32042058660764e-07,1)], "calculate_chromosome_localization-1");
 ###############################################################################
 
 #delete output directory

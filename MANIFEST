@@ -2,6 +2,7 @@ Changes
 Makefile.PL
 MANIFEST
 META.yml
+t/SPtesting.pm
 t/analyze_cnv_data.t
 t/analyze_likely_regions.t
 t/analyze_trans_data.t
