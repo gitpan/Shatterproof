@@ -55,12 +55,12 @@ ok(Shatterproof::load_config_file($config_file_path),'load_config_file');
 open(FILE, "<", "$dir/json/suspect_regions_array_ref.json");
 my $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($suspect_regions_array_ref, $test1_json, "calculate_chromosome_localization-1");
+cmp_bag($suspect_regions_array_ref, $test1_json, "calculate_chromosome_localization-1");
 
 open(FILE, "<", "$dir/json/likely_regions_array_ref.json");
 $test1_json = JSON::decode_json(<FILE>);
 close(FILE);
-cmp_deeply($likely_regions_array_ref, $test1_json, "calculate_chromosome_localization-2");
+cmp_bag($likely_regions_array_ref, $test1_json, "calculate_chromosome_localization-2");
 
 open(FILE, "<", "$dir/json/genome_cnv_data_windows_hash_ref.json");
 $test1_json = JSON::decode_json(<FILE>);

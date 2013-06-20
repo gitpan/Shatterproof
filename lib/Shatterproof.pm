@@ -44,7 +44,7 @@ use POSIX;
 # 0.08		2013/05/22	sgovind		Added EXPORT code for test case, added minor error checking
 # 0.09		2013/06/10	sgovind		Minor changes to accomodate testing
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 package Shatterproof;
 use Exporter;

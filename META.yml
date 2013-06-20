@@ -26,4 +26,4 @@ requires:
   Test::Deep: 0
   Test::Exception: 0
   Test::More: 0
-version: 0.09
+version: 0.10
