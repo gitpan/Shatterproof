@@ -7,7 +7,6 @@ use strict;
 use File::Path qw(remove_tree);
 use File::Compare;
 use File::Basename;
-use JSON qw[decode_json];
 
 use Test::More tests => 2;
 use Test::Exception;
@@ -51,9 +50,6 @@ ok(Shatterproof::load_config_file($config_file_path),'load_config_file');
 $genome_mutation_density_hash_ref = Shatterproof::calculate_genome_localization($output_directory, $chromosome_copy_number_count_hash_ref, $chromosome_translocation_count_hash_ref);
 
 #check output hash
-open(FILE, "<", "$dir/json/genome_mutation_density_hash_ref_test_1.json");
-my $test1_json = JSON::decode_json(<FILE>);
-close(FILE);
 cmp_deeply($genome_mutation_density_hash_ref, {"11"=>num(9.66885049803208e-08,1),"21"=>num(1.27810981532314e-07,1),"7"=>num(6.92601773926923e-08,1),"Y"=>num(1.35084462079471e-06,1),"17"=>num(7.62827497419037e-08,1),"2"=>num(4.11944497119558e-08,1),"22"=>num(1.41331475349378e-07,1),"1"=>num(6.8770304710581e-08,1),"18"=>num(3.9412929697988e-08,1),"16"=>num(2.92719434928999e-07,1),"13"=>num(0,1),"6"=>num(1.34583994699076e-07,1),"X"=>num(3.87312284743936e-08,1),"3"=>num(8.02218828981421e-08,1),"9"=>"0","12"=>num(4.5355061875114e-08,1),"20"=>"0","14"=>num(5.6411874756048e-08,1),"15"=>num(3.98648919016117e-08,1),"8"=>num(5.46915707833418e-08,1),"4"=>num(2.82333656865048e-07,1),"19"=>num(7.8361736929274e-08,1),"10"=>num(1.32964247236174e-07,1),"5"=>num(6.08279684078997e-08,1)}, 'calculate_genome_localization-1');
 ###############################################################################
 

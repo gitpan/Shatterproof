@@ -7,7 +7,6 @@ use strict;
 use File::Path qw(remove_tree);
 use File::Compare;
 use File::Basename;
-use JSON qw[decode_json];
 
 use Test::More tests => 2;
 use Test::Exception;

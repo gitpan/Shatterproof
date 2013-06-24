@@ -44,6 +44,15 @@ t/ref/chr1_cnv_localization.log.ref
 t/ref/TP53.spc.ref
 t/ref/chr2_translocation_localization.log.ref
 t/ref/chr11_cnv_localization.log.ref
+t/ref/chr10_cnv_localization.log.ref.mswin32
+t/ref/chr11_cnv_localization.log.ref.mswin32
+t/ref/chr1_cnv_localization.log.ref.mswin32
+t/ref/chr21_translocation_localization.log.ref.mswin32
+t/ref/chr2_translocation_localization.log.ref.mswin32
+t/ref/chr3_translocation_localization.log.ref.mswin32
+t/ref/chr4_mutation_localization.log.ref.mswin32
+t/ref/chrX_mutation_localization.log.ref.mswin32
+t/ref/chrY_mutation_localization.log.ref.mswin32
 t/spt/testing_trans_invalid_header.spt
 t/spt/testing_trans_tp53.spt
 t/spt/testing_trans_1.spt
@@ -69,4 +78,3 @@ sample_data/trans/sample_trans.spt
 sample_data/loh/sample_loh.spl
 sample_data/indels/sample_indels.vcf
 sample_data/example_guide.txt
-META.json                                Module JSON meta-data (added by MakeMaker)

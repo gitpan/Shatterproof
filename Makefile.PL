@@ -10,7 +10,7 @@ WriteMakefile(
 				'File::Basename' => 2.00,
 				'List::Util' => 1.00,
 				'POSIX' => 1.00,
-				'JSON' => 2.00,
+				'JSON::XS' => 2.30,
 				'Test::More' => 0,
 				'Test::Exception' => 0,
 				'Test::Deep' => 0

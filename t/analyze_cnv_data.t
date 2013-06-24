@@ -7,7 +7,7 @@ use strict;
 use File::Path qw(remove_tree);
 use File::Compare;
 use File::Basename;
-use JSON qw[decode_json];
+use JSON::XS qw[decode_json];
 
 use Test::More tests => 12;
 use Test::Exception;
@@ -42,17 +42,17 @@ ok(Shatterproof::load_config_file($config_file_path),'load_config_file');
 ($genome_cnv_data_hash_ref, $chromosome_copy_number_count_hash_ref, $chromosome_cnv_breakpoints_hash_ref) = Shatterproof::analyze_cnv_data($output_directory, \@cnv_files, $bin_size, \$tp53_mutation_found);
 
 open(FILE, "<", "$dir/json/genome_cnv_data_hash_ref_test_1.json");
-my $test1_json = JSON::decode_json(<FILE>);
+my $test1_json = JSON::XS::decode_json(<FILE>);
 close(FILE);
 cmp_deeply($genome_cnv_data_hash_ref,$test1_json, 'analyze_cnv_data-1-1-file-valid_input-no_tp53');
 
 open(FILE, "<", "$dir/json/chromosome_copy_number_count_hash_ref_test_1.json");
-$test1_json = JSON::decode_json(<FILE>);
+$test1_json = JSON::XS::decode_json(<FILE>);
 close(FILE);
 cmp_deeply($chromosome_copy_number_count_hash_ref,$test1_json, 'analyze_cnv_data-1-2-file-valid_input-no_tp53');
 
 open(FILE, "<", "$dir/json/chromosome_cnv_breakpoints_hash_ref_test_1.json");
-$test1_json = JSON::decode_json(<FILE>);
+$test1_json = JSON::XS::decode_json(<FILE>);
 close(FILE);
 cmp_deeply($chromosome_cnv_breakpoints_hash_ref,$test1_json, 'analyze_cnv_data-1-3-file-valid_input-no_tp53');
 

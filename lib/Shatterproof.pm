@@ -43,8 +43,11 @@ use POSIX;
 # 0.07		2012/12/27	sgovind		Added example guide for provided sample data
 # 0.08		2013/05/22	sgovind		Added EXPORT code for test case, added minor error checking
 # 0.09		2013/06/10	sgovind		Minor changes to accomodate testing
+# 0.10		2013/06/19	sgovind		Minor changes to accomodate testing
+# 0.11		2013/06/24	sgovind		Changed all sorts to stable sorts. Reduced number of posix
+#						calculations.
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 package Shatterproof;
 use Exporter;
@@ -1635,6 +1638,7 @@ sub calculate_genome_localization {
 	print $OUTPUT_FILE "#chr\tcount\tdensity\n";
 
 	#for each chromosome print the count and overall density
+	{use sort 'stable';
 	for my $chr ( sort keys %chromosome_mutation_count){
 			$density = $chromosome_mutation_count{$chr}/$chromosome_length{$chr};
 			
@@ -1648,6 +1652,7 @@ sub calculate_genome_localization {
 			#Replace the count with the density
 			$chromosome_mutation_count{$chr} = $density;
 			}	
+	}#use sort 'stable'
 
 	close ($OUTPUT_FILE);
 
@@ -1855,9 +1860,10 @@ sub calculate_chromosome_localization {
 				print $OUTPUT_FILE "0";
 				}
 			else{
-				print $OUTPUT_FILE (POSIX::ceil((@{$genome_cnv_data_windows{$cnv_key}}[0])/2))/($window_size*$bin_size);
+				my $rounded = POSIX::ceil((@{$genome_cnv_data_windows{$cnv_key}}[0])/2);
+				print $OUTPUT_FILE ($rounded)/($window_size*$bin_size);
 				#add the cnv count to the total mutation count for the region
-				@{$genome_mutation_data_windows{$cnv_key}}[0] += POSIX::ceil(@{$genome_cnv_data_windows{$cnv_key}}[0]/2);
+				@{$genome_mutation_data_windows{$cnv_key}}[0] += $rounded;
 				}
 
 			#perform the sliding window analysis for the rest of the chromosome
@@ -1904,9 +1910,10 @@ sub calculate_chromosome_localization {
 					print $OUTPUT_FILE "0";
 					}
 				else{
-					print $OUTPUT_FILE (POSIX::ceil((@{$genome_cnv_data_windows{$cnv_key}}[$chr_pos])/2))/($window_size*$bin_size);
+					my $rounded = POSIX::ceil((@{$genome_cnv_data_windows{$cnv_key}}[$chr_pos])/2);
+					print $OUTPUT_FILE ($rounded)/($window_size*$bin_size);
 					#add the cnv count to the total mutation count for the region
-					@{$genome_mutation_data_windows{$cnv_key}}[$chr_pos] += POSIX::ceil(@{$genome_cnv_data_windows{$cnv_key}}[$chr_pos]/2);
+					@{$genome_mutation_data_windows{$cnv_key}}[$chr_pos] += $rounded;
 					}
 				}#for(my $chr_pos = 1; $chr_pos < scalar(@current_chr_data); $chr_pos++)
 
@@ -1985,9 +1992,10 @@ sub calculate_chromosome_localization {
 				print $OUTPUT_FILE "0";
 				}
 			else{
-				print $OUTPUT_FILE (POSIX::ceil(@{$genome_trans_data_windows{$trans_key}}[0]))/($window_size*$bin_size);
+				my $rounded = POSIX::ceil(@{$genome_trans_data_windows{$trans_key}}[0]);
+				print $OUTPUT_FILE ($rounded)/($window_size*$bin_size);
 				#add the translocation mutation count to the total mutation count for the region
-				@{$genome_mutation_data_windows{$trans_key}}[0] += POSIX::ceil(@{$genome_trans_data_windows{$trans_key}}[0]);
+				@{$genome_mutation_data_windows{$trans_key}}[0] += $rounded;
 				}
 
 			#perform the sliding window analysis for the rest of the chromosome
@@ -2087,8 +2095,9 @@ sub calculate_chromosome_localization {
 					print $OUTPUT_FILE "0";
 					}
 				else{
-					print $OUTPUT_FILE (POSIX::ceil(@{$genome_trans_data_windows{$trans_key}}[$chr_pos]))/($window_size*$bin_size);
-					@{$genome_mutation_data_windows{$trans_key}}[$chr_pos] += POSIX::ceil(@{$genome_trans_data_windows{$trans_key}}[$chr_pos]);
+					my $rounded = POSIX::ceil(@{$genome_trans_data_windows{$trans_key}}[$chr_pos]);
+					print $OUTPUT_FILE ($rounded)/($window_size*$bin_size);
+					@{$genome_mutation_data_windows{$trans_key}}[$chr_pos] += $rounded;
 					}
 				}#for(my $chr_pos = 1; $chr_pos < scalar(@current_chr_data); $chr_pos++)
 
@@ -2282,9 +2291,10 @@ sub check_copy_number_count {
 
 	#for each chromosome
 	#print out the number of regions with the given copy-number
+	{use sort 'stable';
 	for my $chr (sort keys %$chromosome_copy_number_count_hash_ref){
 		my %intermediate_hash = %{$chromosome_copy_number_count_hash_ref->{$chr}};
-		for my $CN (sort {$intermediate_hash{$b} <=> $intermediate_hash{$a} } keys %intermediate_hash){
+		for my $CN (sort {$a <=> $b} keys %intermediate_hash){
 			print $OUTPUT_FILE "\n";
 			print $OUTPUT_FILE "$chr";	#chromosome
 			print $OUTPUT_FILE "\t";
@@ -2293,7 +2303,7 @@ sub check_copy_number_count {
 			print $OUTPUT_FILE $chromosome_copy_number_count_hash_ref->{$chr}->{$CN};	#number of regions with copy-number $CN
 			}
 		}
-
+	}#use sort 'stable'
 	close ($OUTPUT_FILE);
 		
 	}#sub check_copy_number_count
@@ -2332,6 +2342,7 @@ sub check_copy_number_switches {
 	#for each chromosome
 	#sum the total number of CNV events
 	#multiply the sum by 2 to get the number of CNV breakpoints
+	{use sort 'stable';
 	for my $chr (sort keys %$chromosome_copy_number_count_hash_ref){
 		my %intermediate_hash = %{$chromosome_copy_number_count_hash_ref->{$chr}};
 		for my $CN (sort {$intermediate_hash{$b} <=> $intermediate_hash{$a} } keys %intermediate_hash){
@@ -2349,6 +2360,7 @@ sub check_copy_number_switches {
 
 		$switch_count = 0;
 		}
+	}#use sort 'stable'
 
 	close ($OUTPUT_FILE);
 		
@@ -2385,6 +2397,7 @@ sub calculate_interchromosomal_translocation_rate {
 
 	#for each chromosome
 	#print the number of translocations between every other chromosome
+	{use sort 'stable';
 	for my $chr1 (sort keys %$chromosome_translocation_count_hash_ref){
 		my %intermediate_hash = %{$chromosome_translocation_count_hash_ref->{$chr1}};
 
@@ -2397,7 +2410,7 @@ sub calculate_interchromosomal_translocation_rate {
 			print $OUTPUT_FILE $chromosome_translocation_count_hash_ref->{$chr1}->{$chr2};
 			}
 		}
-
+	}#use sort 'stable'
 	close ($OUTPUT_FILE);
 		
 	}#sub calculate_interchromosomal_translocation_rate
@@ -2520,7 +2533,9 @@ sub analyze_suspect_regions {
 
 	#sort the results so that the region with the highest chromothriptic score will be printed
 	#to the final report output file first
+	{use sort 'stable';
 	@suspect_region_data = sort {$b->[3] <=> $a->[3] } @suspect_region_data;
+	}#use sort 'stable'A
 
 	#for each score that is generated print the score and the related statistics for that region 
 	foreach my $score_data (@suspect_region_data){
@@ -2603,9 +2618,11 @@ sub analyze_suspect_regions {
 		$print_string .= "number_of_aberrant_copy_number_states:\t$num_copy_num\n";
 		if($num_copy_num>0){
 			$print_string .= "aberrant_copy_number_states:\n";
+			{use sort 'stable';
 			foreach my $key (sort {$cnv_number_hash{$b} <=> $cnv_number_hash{$a} } keys %cnv_number_hash){
 				$print_string .= "\t$key:\t$cnv_number_hash{$key}\n";
 				}
+			}#use sort 'stable'
 			}
 
 		$print_string .= "\n";
@@ -2615,9 +2632,11 @@ sub analyze_suspect_regions {
 
 		if($num_trans_chr>0){
 			$print_string .= "translocation_chromosomes:\n";
+			{use sort 'stable';
 			foreach my $key (sort {$intertranslocation_hash{$b} <=> $intertranslocation_hash{$a} } keys %intertranslocation_hash){
 				$print_string .= "\t$key:\t$intertranslocation_hash{$key}\n";
 				}
+			}#use sort 'stable'
 			}
 		$print_string .= "\n";
 
@@ -2740,7 +2759,9 @@ sub analyze_likely_regions {
 		}
 
 	#sort the regions by density, largest to smallest
+	{use sort 'stable';
 	@likely_region_data = sort {$b->[3] <=> $a->[3] } @likely_region_data;
+	}#use sort 'stable'
 
 	#print the density for each region to the output file 
 	foreach my $i (@likely_region_data){
@@ -3335,7 +3356,9 @@ sub calculate_translocation_score {
 		#for each significant chromosome calculate the spread between translocation events
 		foreach my $key (@significant_chrs){
 			#sort the breakpoints
+			{use sort 'stable';
 			@{$trans_breakpoints{$key}} = sort {$a <=> $b} @{$trans_breakpoints{$key}};
+			}#use sort 'stable'
 
 			$size = @{$trans_breakpoints{$key}};
 			@diffs = ();
@@ -3486,7 +3509,9 @@ sub calculate_insertion_breakpoint_score {
 		@inserted_breakpoint_list = @{$genome_trans_insertion_breakpoints_hash{$chr}};
 
 		#sort the above list
+		{use sort 'stable';
 		@inserted_breakpoint_list = sort {$a <=> $b} @inserted_breakpoint_list;
+		}#use sort 'stable'
 
 		#calculate how many of the breakpoints with insertions are in the region
 		foreach my $breakpoint (@inserted_breakpoint_list){
@@ -3576,7 +3601,9 @@ sub calculate_loh_score {
 	@cnv_breakpoints = @{$chromosome_cnv_breakpoints_hash{$chr}};
 
 	#sort the list
+	{use sort 'stable';
 	@cnv_breakpoints = sort {$a <=> $b} @cnv_breakpoints;
+	}#use sort 'stable'
 
 	#get the number of breakpoints
 	$cnv_breakpoints_size = @cnv_breakpoints;
@@ -3632,7 +3659,9 @@ sub calculate_loh_score {
 	@loh_breakpoints = @{$chromosome_loh_breakpoints_hash{$chr}};
 
 	#sort the list
+	{use sort 'stable';
 	@loh_breakpoints = sort {$a <=> $b} @loh_breakpoints;
+	}#use sort 'stable'
 
 	#get the number of breakpoints
 	$loh_breakpoints_size = @loh_breakpoints;
