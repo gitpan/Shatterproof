@@ -1,5 +1,9 @@
 Revision history for Perl extension ShatterProof.
 
+0.12 Fri Jun 28 15:00:00 2013
+	-updates to testing package
+	-changed sorting order of interchromosomal translocation output file
+
 0.11 Mon Jun 24 17:00:00 2013
 	-updates to testing package
 	-changed JSON to JSON::XS

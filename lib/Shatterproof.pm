@@ -46,8 +46,10 @@ use POSIX;
 # 0.10		2013/06/19	sgovind		Minor changes to accomodate testing
 # 0.11		2013/06/24	sgovind		Changed all sorts to stable sorts. Reduced number of posix
 #						calculations.
+# 0.12		2013/06/28	sgovind		Changed sort order of interchromosomal translocation output
+#
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 package Shatterproof;
 use Exporter;
@@ -2401,7 +2403,7 @@ sub calculate_interchromosomal_translocation_rate {
 	for my $chr1 (sort keys %$chromosome_translocation_count_hash_ref){
 		my %intermediate_hash = %{$chromosome_translocation_count_hash_ref->{$chr1}};
 
-		for my $chr2 (sort {$intermediate_hash{$b} <=> $intermediate_hash{$a} } keys %intermediate_hash){
+		for my $chr2 (sort keys %intermediate_hash){
 			print $OUTPUT_FILE "\n";
 			print $OUTPUT_FILE $chr1;
 			print $OUTPUT_FILE "\t";

@@ -78,3 +78,4 @@ sample_data/trans/sample_trans.spt
 sample_data/loh/sample_loh.spl
 sample_data/indels/sample_indels.vcf
 sample_data/example_guide.txt
+META.json                                Module JSON meta-data (added by MakeMaker)
