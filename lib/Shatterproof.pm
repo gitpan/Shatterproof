@@ -47,9 +47,9 @@ use POSIX;
 # 0.11		2013/06/24	sgovind		Changed all sorts to stable sorts. Reduced number of posix
 #						calculations.
 # 0.12		2013/06/28	sgovind		Changed sort order of interchromosomal translocation output
-#
+# 0.13		2013/0716	sgovind		Corrected logical error in calculate_loh_score
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 package Shatterproof;
 use Exporter;
@@ -3738,7 +3738,7 @@ sub calculate_loh_score {
 				}
 
 			#If an overlap was detected
-			if($start_overlap_loh_cnv==1 || $end_overlap_loh_cnv==1) {
+			if($start_overlap_loh_cnv==1 && $end_overlap_loh_cnv==1) {
 				$loh_region_size -= ($cnv_breakpoints[$cnv_end] - $cnv_breakpoints[$cnv_start]);
 				}
 			elsif($start_overlap_loh_cnv==1){
